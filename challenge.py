@@ -58,9 +58,9 @@ while True:
         #Only count if entry is successful
         count = count + 1        
 
-    query(queries,supplies)
+    queryTest(queries,supplies)
 
-def query(queries, supplies):
+def queryTest(queries, supplies):
     resultsA = [];
     resultsB = [];
     resultsC = [];
