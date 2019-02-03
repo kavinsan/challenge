@@ -41,7 +41,8 @@ def search(queries,supplies):
 
 
         results.append(sorted(queryResult, key=lambda x: (x is None, x)))
-    print(results)
+    
+    [print(result) for result in results]
 
 
 supply_rates = int(input("Enter the number of supply rates"))
