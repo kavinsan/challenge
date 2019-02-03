@@ -1,108 +1,72 @@
+"""
+    PLEASE NOTE THAT THIS VERSION OF THE COMMIT WAS AFTER THE TIME LIMIT!!!
+    This commit was only for practicing without a stressful time limit
 
-#N the number of supplier rates (1 < N < 1,000,000)
-#The next N lines will contain the CITY,SUPPLIER,PRICE <= no spaces only commas
+    Refer to older commit for the submitted version. Or this one if you'd like
+"""
 
-supplier_rates  = int(input("Enter the number of supplier rates: "))
-
-while True:
-    if((supplier_rates > 1) & (supplier_rates < 1000000)):
-        break;
-    else:
-        supplier_rates = int(input("Enter the number of supplier rates between 1 and 1,000,000: "))
-
-
-count = 0
 supplies = []
-
-while True:
-    #Make sure only N inputs are taken
-    if(count == int(supplier_rates)):
-        break;
-    
-    supply = input()
-    
-    #Separating every concatentation of lines with a space but every supply rate line by commas
-    supply = supply.split(',')
-    if(len(supply) != 3):
-        print("Incorrect format!")
-    else:
-    
-        supplies.append(supply)
-        #Only count if entry is successful
-        count = count + 1
-
-
-num_queries = int(input("Enter the number of queries: "))
-
-while True:
-    if((num_queries > 1) & (num_queries < 100)):
-        break;
-    else:
-        num_queries = int(input("Enter the number of supplier rates between 1 and 1,000,000: "))
-
-count = 0
 queries = []
 
-while True:
-    #Make sure only N inputs are taken
-    if(count == int(num_queries)):
-        break;
-    
-    query = input()
-    
-    query = query.split(',')
-    if(len(query) != 2):
-        print("Incorrect format!")
-    else:
-        queries.append(query)
-        #Only count if entry is successful
-        count = count + 1        
+results = []
 
-    queryTest(queries,supplies)
 
-def queryTest(queries, supplies):
-    resultsA = [];
-    resultsB = [];
-    resultsC = [];
-    resultsD = [];
+def search(queries,supplies):
+    #supplies => CITY,SUPPLIER,PRICE
+    #query => CITY,DAY 
 
-    for queries in queries:
-        city = queries.pop();
-        days = int(queries.pop());
-
+    for query in queries:
+        cityQuery = query[0]
+        day = int(query[1])
+        queryResult = []
         for supply in supplies:
-            citySupply = supply[0];
-            supplier = supply[1];
-            price = float(supply[2]);
+            citySupply = supply[0]
+            supplier = supply[1]
+            price = int(supply[2])
 
-            if(supplier == 'A'):
-                if(days == 1):
-                    price *= 2;
-                    resultsA.append(round(price,2))
+            if(supplier == 'A') & (day == 1) & (citySupply == cityQuery):
+                price = price * 2
+                queryResult.append(price)
+                
+            elif(supplier == 'B') & (day < 3) & (citySupply == cityQuery):
+                queryResult.append(None)
 
-            elif(supplies == 'B'):
-                if(days < 3):
-                    resultsB.append(None)
-                else:
-                    resultsB.append(round(price,2))
+            elif(supplier =='C') & (day >= 7) & (citySupply == cityQuery):
+                price = price - (price*1/10)
+                queryResult.append(price)
 
-            elif(supplies == 'C'):
-                if(days >= 7):
-                    price -= (price * 1/10);
-                    resultsC.append(round(price,2))
-
-            elif(supplies == 'D'):
-                if(days < 7):
-                    price += (price * 1/10);
-                    resultsD.append(round(price,2))
-
-    print(resultsA.sort())
-    print(resultsB.sort())
-    print(resultsC.sort())
-    print(resultsD.sort())
+            elif(supplier =='D') & (day < 7) & (citySupply == cityQuery):
+                price = price + (price*1/10)
+                queryResult.append(price)
 
 
-# Q: The number of user queries (1 < Q < 100) 
-#Query: CITY,DATE,PRICE separated by commas NOT spaces
-#Days D until check-in is 1 <= D <= 20
+        results.append(sorted(queryResult, key=lambda x: (x is None, x)))
+    print(results)
 
+
+supply_rates = int(input("Enter the number of supply rates"))
+
+count = 0
+#Get the list of supply rates in the format of CITY,SUPPLIER,PRICE
+while(count < supply_rates):
+
+    supply = input(f"{count + 1}: ")
+    if(len(supply.split(',')) != 3):
+        continue
+    else:
+        supplies.append(supply.split(','))
+        count = count + 1
+
+num_queries = int(input("Enter the number of queries"));
+
+count = 0
+while(count < num_queries):
+
+    query = input(f"{count + 1}: ")
+    if(len(query.split(',')) != 2):
+        continue
+    else:
+        queries.append(query.split(','))
+        count = count + 1
+
+search(queries,supplies)
